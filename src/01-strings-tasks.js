@@ -203,8 +203,13 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const newStrStart = width - 2 === 0 ? '┌┐\n' : `┌${'─'.padStart(width - 2, '─')}┐\n`;
+  const newStrEnd = width - 2 === 0 ? '└┘\n' : `└${'─'.padStart(width - 2, '─')}┘\n`;
+  const middle = width - 2 === 0 ? '' : `│${' '.padStart(width - 2, ' ')}│\n`;
+  return height - 2 === 0
+    ? newStrStart + newStrEnd
+    : newStrStart + middle.padStart(middle.length * (height - 2), middle) + newStrEnd;
 }
 
 
@@ -224,8 +229,18 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const alphabetU = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const alphabetL = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  const arr = [];
+  for (let i = 0; i < str.length; i += 1) {
+    if (alphabetU.indexOf(str[i]) !== -1) {
+      arr.push(alphabetU[(alphabetU.indexOf(str[i]) + 13) % 26]);
+    } else if (alphabetL.indexOf(str[i]) !== -1) {
+      arr.push(alphabetL[(alphabetL.indexOf(str[i]) + 13) % 26]);
+    } else { arr.push(str[i]); }
+  }
+  return arr.join('');
 }
 
 /**
@@ -272,8 +287,18 @@ function isString(value) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cardsArr = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣',
+    'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦',
+    'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥',
+    'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
+  let index;
+  for (let i = 0; i < cardsArr.length; i += 1) {
+    if (cardsArr[i] === value) {
+      index = i;
+    }
+  }
+  return index;
 }
 
 
